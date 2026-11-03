@@ -1,0 +1,27 @@
+# Virtual environment
+.venv/
+
+# Local config (password hash and other demo secrets)
+.env
+config.local.json
+instance/
+
+# Real inventory (SSH credentials). Example inventory stays tracked.
+data/inventory.json
+
+# Private keys
+*.pem
+*.key
+*.ppk
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+id_ecdsa
+id_ecdsa.*
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
