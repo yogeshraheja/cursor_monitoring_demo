@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Add server{% endblock %}
+
+{% block content %}
+<section class="panel narrow">
+  <p><a href="{{ url_for('home') }}">All servers</a></p>
+  <h1>Add a server</h1>
+  <p class="lede">This saves the host in the local inventory. It does not change the remote machine.</p>
+  {% if errors %}
+  <div class="banner banner-error" role="alert">
+    {% for error in errors %}
+    <p>{{ error }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <form method="post" action="{{ url_for('server_add') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="display_name">Display name</label>
+    <input id="display_name" name="display_name" value="{{ form.display_name }}" required>
+    <label for="host">Host name or IP</label>
+    <input id="host" name="host" value="{{ form.host }}" required>
+    <label for="ssh_port">SSH port</label>
+    <input id="ssh_port" name="ssh_port" inputmode="numeric" placeholder="22" value="{{ form.ssh_port }}">
+    <label for="ssh_user">SSH user</label>
+    <input id="ssh_user" name="ssh_user" value="{{ form.ssh_user }}" required>
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="new-password">
+    <label for="key_path">Private key path</label>
+    <input id="key_path" name="key_path" value="{{ form.key_path }}" autocomplete="off">
+    <p class="field-note">Enter a password or a private key path. The password is not shown again after save.</p>
+    <button class="button" type="submit">Save server</button>
+  </form>
+</section>
+{% endblock %}

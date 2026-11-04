@@ -8,6 +8,7 @@ instance/
 
 # Real inventory (SSH credentials). Example inventory stays tracked.
 data/inventory.json
+data/*.tmp
 
 # Private keys
 *.pem

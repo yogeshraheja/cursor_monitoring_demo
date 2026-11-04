@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Servers{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <h1>Servers</h1>
+  <p class="lede">This is the Linux server monitoring demo. It shows live CPU, memory, network, and listening ports for Linux servers registered on this machine.</p>
+  <p class="refresh-note">Reachability refreshes every 5 seconds.</p>
+  <div id="live-region" data-url="{{ url_for('list_live') }}" data-interval="5000" data-mode="status">
+    {% include "_server_list.html" %}
+  </div>
+</section>
+{% endblock %}

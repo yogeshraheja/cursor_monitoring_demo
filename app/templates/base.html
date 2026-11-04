@@ -9,8 +9,16 @@
 <body>
   <header class="site-header">
     <div class="site-header-inner">
-      <a class="brand" href="{{ url_for('home') }}">Server monitoring</a>
-      <p class="brand-note">Local demo</p>
+      <a class="brand" href="{{ url_for('home') if signed_in else url_for('sign_in') }}">Server monitoring</a>
+      <div class="header-tools">
+        <p class="brand-note">Local demo</p>
+        {% if signed_in %}
+        <form class="inline-form" method="post" action="{{ url_for('sign_out') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button class="button button-quiet" type="submit">Sign out</button>
+        </form>
+        {% endif %}
+      </div>
     </div>
   </header>
   <main class="site-main">
@@ -19,5 +27,50 @@
   <footer class="site-footer">
     <p>Linux server monitoring demo. Runs on this machine only.</p>
   </footer>
+  <script>
+    (function () {
+      var region = document.getElementById("live-region");
+      if (!region) {
+        return;
+      }
+      var url = region.getAttribute("data-url");
+      var interval = Number(region.getAttribute("data-interval"));
+      if (!url || url.indexOf("/") !== 0 || url.indexOf("//") === 0 || !interval) {
+        return;
+      }
+      var mode = region.getAttribute("data-mode") || "html";
+      window.setInterval(function () {
+        window.fetch(url, {
+          credentials: "same-origin",
+          headers: { "Accept": mode === "status" ? "application/json" : "text/html" }
+        }).then(function (response) {
+          if (!response.ok) {
+            return null;
+          }
+          return mode === "status" ? response.json() : response.text();
+        }).then(function (payload) {
+          if (!payload) {
+            return;
+          }
+          if (mode === "status") {
+            var allowed = { ok: true, timeout: true, authentication: true, unreachable: true, malformed: true };
+            (payload.servers || []).forEach(function (server) {
+              if (!server || !allowed[server.category]) {
+                return;
+              }
+              var cell = document.getElementById("status-" + server.id);
+              if (!cell) {
+                return;
+              }
+              cell.textContent = server.status;
+              cell.className = "status status-" + server.category;
+            });
+            return;
+          }
+          region.innerHTML = payload;
+        }).catch(function () {});
+      }, interval);
+    })();
+  </script>
 </body>
 </html>
