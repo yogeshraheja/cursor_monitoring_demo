@@ -1,0 +1,13 @@
+{
+  "servers": [
+    {
+      "id": "11111111111111111111111111111111",
+      "display_name": "Example application host",
+      "host": "203.0.113.10",
+      "ssh_port": 22,
+      "ssh_user": "monitor",
+      "password": "example-only-not-a-real-password",
+      "key_path": ""
+    }
+  ]
+}

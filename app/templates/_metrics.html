@@ -1,0 +1,78 @@
+{% if metrics.error %}
+<p class="banner banner-error" role="alert">{{ metrics.error }}</p>
+{% else %}
+<section>
+  <h2>CPU</h2>
+  <dl class="facts">
+    <div><dt>Utilization</dt><dd>{{ metrics.cpu.utilization }}</dd></div>
+    <div><dt>Load average 1 minute</dt><dd>{{ metrics.cpu.load_1 }}</dd></div>
+    <div><dt>Load average 5 minutes</dt><dd>{{ metrics.cpu.load_5 }}</dd></div>
+    <div><dt>Load average 15 minutes</dt><dd>{{ metrics.cpu.load_15 }}</dd></div>
+  </dl>
+</section>
+<section>
+  <h2>Memory</h2>
+  <dl class="facts">
+    <div><dt>Total</dt><dd>{{ metrics.memory.total }}</dd></div>
+    <div><dt>Used</dt><dd>{{ metrics.memory.used }}</dd></div>
+    <div><dt>Available</dt><dd>{{ metrics.memory.available }}</dd></div>
+    <div><dt>Used percent</dt><dd>{{ metrics.memory.used_percent }}</dd></div>
+  </dl>
+</section>
+<section>
+  <h2>Network</h2>
+  {% if metrics.interfaces %}
+  <table>
+    <thead>
+      <tr>
+        <th>Interface</th>
+        <th>Receive bytes</th>
+        <th>Transmit bytes</th>
+        <th>Receive rate</th>
+        <th>Transmit rate</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for iface in metrics.interfaces %}
+      <tr>
+        <td>{{ iface.name }}</td>
+        <td>{{ iface.rx_bytes }}</td>
+        <td>{{ iface.tx_bytes }}</td>
+        <td>{% if iface.rx_rate %}{{ iface.rx_rate }}{% else %}No rate yet{% endif %}</td>
+        <td>{% if iface.tx_rate %}{{ iface.tx_rate }}{% else %}No rate yet{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No interfaces reported.</p>
+  {% endif %}
+</section>
+<section>
+  <h2>Listening ports</h2>
+  {% if metrics.ports %}
+  <table id="listening-ports">
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th>Port</th>
+        <th>Protocol</th>
+        <th>Process</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for port in metrics.ports %}
+      <tr>
+        <td>{{ port.address }}</td>
+        <td>{{ port.port }}</td>
+        <td>{{ port.protocol }}</td>
+        <td>{{ port.process or "—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No listening ports reported.</p>
+  {% endif %}
+</section>
+{% endif %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Remove {{ server.display_name }}{% endblock %}
+
+{% block content %}
+<section class="panel narrow">
+  <h1>Remove {{ server.display_name }}</h1>
+  <p class="lede">This removes the server from the local inventory. The host is not changed.</p>
+  <dl class="facts">
+    <div><dt>Host</dt><dd>{{ server.host }}</dd></div>
+    <div><dt>SSH port</dt><dd>{{ server.ssh_port }}</dd></div>
+    <div><dt>SSH user</dt><dd>{{ server.ssh_user }}</dd></div>
+  </dl>
+  <form method="post" action="{{ url_for('server_remove', server_id=server.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button class="button button-danger" type="submit">Remove server</button>
+    <a class="button button-quiet" href="{{ url_for('home') }}">Cancel</a>
+  </form>
+</section>
+{% endblock %}

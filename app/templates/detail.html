@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}{{ server.display_name }}{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <p><a href="{{ url_for('home') }}">All servers</a></p>
+  <h1>{{ server.display_name }}</h1>
+  <p class="lede">{{ server.host }}:{{ server.ssh_port }} · {{ server.ssh_user }}</p>
+  <p class="refresh-note">Refreshes every 5 seconds. Monitoring on this page is read-only.</p>
+  <div id="live-region" data-url="{{ url_for('server_live', server_id=server.id) }}" data-interval="5000" data-mode="html">
+    {% include "_metrics.html" %}
+  </div>
+</section>
+{% endblock %}
